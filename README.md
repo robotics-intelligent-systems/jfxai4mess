@@ -842,6 +842,36 @@ The exact upstream project should be documented because the source README gives 
 
 ---
 
+
+## Marine Energy Extension — HECS, TEC, WEC and OTEC
+
+JFXAI4MESS also includes an open, modular marine-energy profile for resource modelling, conversion-system simulation, co-simulation and digital-twin development. The concepts below can be represented with open Modelica/Python models, FMI/FMU interfaces, hydrodynamic solvers and reusable data contracts.
+
+| Concept | Definition | Integration role |
+|---|---|---|
+| **HECS** | **Hydrokinetic Energy Conversion Systems**, covering submerged and kinetic water turbines. | Umbrella profile for marine-current energy converters, underwater turbine modules, power take-off, mooring, subsea collection and operational digital twins. |
+| **TEC** | **Tidal Energy Converter** or **Tidal Stream Generator**. | Tidal-resource and current-flow simulation, turbine and generator models, array interaction, control, maintenance and grid/export studies. |
+| **WEC** | **Wave Energy Converter**. | Wave-resource, hydrodynamic-response, power-take-off, survivability, control and performance modelling. This extends the existing wave-energy category. |
+| **OTEC** | **Ocean Thermal Energy Conversion**. | Ocean temperature-gradient, heat-cycle, seawater-interface, auxiliary-load and dispatch studies for integrated marine-energy scenarios. |
+
+Recommended integration boundary:
+
+```text
+Ocean Resource
+      ↓
+HECS / TEC / WEC / OTEC Conversion Model
+      ↓
+Generator, Thermal Cycle or Power-Take-Off
+      ↓
+Power Conditioning and Marine Collector
+      ↓
+Grid / Storage / Hydrogen / Desalination Scenario
+      ↓
+Digital Twin, Forecasting and PHM
+```
+
+These profiles remain modular: each converter can be simulated independently and then connected through FMI/FMU, Modelica, Python APIs, mosaik or preCICE where the coupling requires tighter multiphysics coordination.
+
 # 18. Category O — Multiphysics Coupling
 
 ## preCICE

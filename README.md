@@ -1,7 +1,55 @@
 # JFXAI4MESS — Open-Source Alternative Integration Architecture
 
-> **Project focus:** AI-Powered Multi-Energy System Simulation Platform  
+> **Project focus:** AI-Powered Multi-Energy System Simulation Platform
 > **Architecture goal:** reorganize the alternatives listed in the JFXAI4MESS project description into a modular integration architecture for multi-energy simulation, power systems, hydrogen, thermal systems, hydropower, wind, photovoltaics, wave energy, floating offshore systems, co-simulation, optimization, digital twins, condition monitoring, and AI-assisted engineering.
+
+**Current baseline:** documentation, three CAD concept boards and four Draw.io reference files. Executable adapters, solver interoperability and operational digital twins remain proposed. Numeric strategic scores below are editorial priorities, not measured benchmarks or verified maturity ratings.
+
+---
+
+## Contents
+
+- [1. Source Project Direction](#1-source-project-direction)
+- [2. Integration Principle](#2-integration-principle)
+- [3. High-Level Alternative Integration Architecture](#3-high-level-alternative-integration-architecture)
+- [4. Category A — Agent-Based Energy-System Control](#4-category-a--agent-based-energy-system-control)
+- [5. Category B — Solar, Storage & Distributed Energy](#5-category-b--solar-storage--distributed-energy)
+- [6. Category C — Hydrogen & Integrated Energy](#6-category-c--hydrogen--integrated-energy)
+- [7. Category D — Green IT / Energy-Aware Computing](#7-category-d--green-it--energy-aware-computing)
+- [8. Category E — Power-System Analysis](#8-category-e--power-system-analysis)
+- [9. Category F — HIL & Smart Grid Co-Simulation](#9-category-f--hil--smart-grid-co-simulation)
+- [10. Category G — System Optimization](#10-category-g--system-optimization)
+- [11. Category H — Hydropower](#11-category-h--hydropower)
+- [12. Category I — Thermal Systems](#12-category-i--thermal-systems)
+- [13. Category J — Wind Turbine Dynamics](#13-category-j--wind-turbine-dynamics)
+- [14. Category K — Wind Farm Simulation & Design](#14-category-k--wind-farm-simulation--design)
+- [15. Category L — Floating Offshore Wind](#15-category-l--floating-offshore-wind)
+- [16. Category M — Marine Hydrodynamics](#16-category-m--marine-hydrodynamics)
+- [17. Category N — Wave Energy](#17-category-n--wave-energy)
+- [18. Category O — Multiphysics Coupling](#18-category-o--multiphysics-coupling)
+- [19. Category P — Nuclear / Advanced Reactor Research Reference](#19-category-p--nuclear--advanced-reactor-research-reference)
+- [20. Category Q — Chemistry / Energy Agents](#20-category-q--chemistry--energy-agents)
+- [21. Category R — Prognostics & Health Management](#21-category-r--prognostics--health-management)
+- [22. Recommended Co-Simulation Backbone](#22-recommended-co-simulation-backbone)
+- [23. Recommended Energy-System Solver Hierarchy](#23-recommended-energy-system-solver-hierarchy)
+- [24. Multi-Energy Digital Twin Architecture](#24-multi-energy-digital-twin-architecture)
+- [25. Proposed Complementary Open AI Layer](#25-proposed-complementary-open-ai-layer)
+- [26. AI Engineering Copilot](#26-ai-engineering-copilot)
+- [27. Model Routing Principle](#27-model-routing-principle)
+- [28. Alternative Integration Profiles](#28-alternative-integration-profiles)
+- [29. Strategic Priority](#29-strategic-priority)
+- [30. Value Matrix](#30-value-matrix)
+- [31. Recommended MVP](#31-recommended-mvp)
+- [32. MVP Extension — Offshore Wind](#32-mvp-extension--offshore-wind)
+- [33. MVP Extension — Asset Operations](#33-mvp-extension--asset-operations)
+- [34. MBSE → CAD → CAM → CAS Mapping](#34-mbse--cad--cam--cas-mapping)
+- [35. Suggested Repository Structure](#35-suggested-repository-structure)
+- [36. Roadmap](#36-roadmap)
+- [37. Final Strategic Architecture](#37-final-strategic-architecture)
+- [38. Strategic Recommendation](#38-strategic-recommendation)
+- [39. Source-List Classification Notes](#39-source-list-classification-notes)
+- [40. Disclaimer](#40-disclaimer)
+- [41. CAD Concept Catalogue and Existing Assets](#41-cad-concept-catalogue-and-existing-assets)
 
 ---
 
@@ -38,40 +86,29 @@ Its source list spans:
 
 The repository also preserves the engineering lifecycle:
 
-```text
-MBSE → CAD → CAM → CAS
-```
+**Reference sequence:** MBSE → CAD → CAM → CAS.
 
 with Arcadia/Capella concepts for model-based systems engineering, CAD for design, CAM for manufacturing/assembly, and CAS for end-to-end simulation and performance analysis.
 
 ---
 
-# 2. Integration Principle
+## 2. Integration Principle
 
-The source alternatives should not be treated as one monolithic simulator.
+The source alternatives should not be treated as one monolithic simulator. Reference tables list candidate roles; they do not establish executable dataflow or compatibility. Coupling requires explicit adapters and numerical validation.
 
 A better architecture is a **federation of domain simulators connected through open co-simulation and data contracts**:
 
-```text
-Energy-System Requirements
-          ↓
-MBSE / System Architecture
-          ↓
-Scenario & Asset Definition
-          ↓
-┌─────────┼─────────┬─────────┬──────────┬──────────┐
-↓         ↓         ↓         ↓          ↓          ↓
-Grid    Hydrogen   Thermal   Hydro      Wind      Solar
-↓         ↓         ↓         ↓          ↓          ↓
-Domain Simulators / Modelica / CFD / Aeroelastic Models
-          ↓
-     Co-Simulation Layer
-          ↓
- System Optimization + Control
-          ↓
- Digital Twin / Forecasting
-          ↓
- PHM / Operations / Decision Support
+```mermaid
+flowchart TD
+    R["Requirements and scenario"] --> C["Domain and interface selection"]
+    C --> M["Versioned simulator adapters"]
+    M --> S["Coordinated simulation"]
+    S --> Q{"Consistency checks pass?"}
+    Q -->|No| C
+    Q -->|Yes| E["Results and engineering review"]
+    E --> D{"Scenario objectives met?"}
+    D -->|No| R
+    D -->|Yes| B["Evidence baseline"]
 ```
 
 The central principle is:
@@ -80,96 +117,46 @@ The central principle is:
 
 ---
 
-# 3. High-Level Alternative Integration Architecture
+## 3. High-Level Alternative Integration Architecture
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        ENGINEERING EXPERIENCE                               │
-│ Web UI | Jupyter | Scenario Editor | Dashboards | Operator Console        │
-└────────────────────────────────┬────────────────────────────────────────────┘
-                                 │
-                                 v
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    AI / AGENT ORCHESTRATION LAYER                           │
-│ AgentLib | Scenario Agent | Optimization Agent | RAG | PHM Assistant      │
-└────────────────────────────────┬────────────────────────────────────────────┘
-                                 │
-            ┌────────────────────┼───────────────────────┐
-            │                    │                       │
-            v                    v                       v
-┌───────────────────┐  ┌─────────────────────┐  ┌──────────────────────────┐
-│ POWER SYSTEMS     │  │ MULTI-ENERGY / H2   │  │ THERMAL / HYDRO         │
-│ PyPSA             │  │ H2Integrate          │  │ ThermoSysPro             │
-│ Antares Simulator │  │ HYBRID               │  │ ThermoCycle              │
-│ Dynaωo            │  │ LibreSolar           │  │ OpenHPL                  │
-│ PowerGrids        │  │ OpenRESV             │  │ HanserModelica           │
-└─────────┬─────────┘  └──────────┬──────────┘  └────────────┬─────────────┘
-          │                       │                          │
-          └───────────────┬───────┴───────────────┬──────────┘
-                          │                       │
-                          v                       v
-              ┌──────────────────────┐  ┌──────────────────────────┐
-              │ WIND / OFFSHORE      │  │ MARINE / WAVE            │
-              │ OpenFAST             │  │ BEMRosetta               │
-              │ SHARPy               │  │ oc4-floatfoam            │
-              │ WindSE               │  │ WEC Simulator            │
-              │ WInc3D               │  │ wave-structure models    │
-              │ OpenOA               │  │                          │
-              └──────────┬───────────┘  └────────────┬─────────────┘
-                         │                           │
-                         └─────────────┬─────────────┘
-                                       v
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          CO-SIMULATION LAYER                                │
-│ mosaik | preCICE | FMI/FMU | OpenDSS↔Typhoon HIL interface               │
-└────────────────────────────────┬────────────────────────────────────────────┘
-                                 │
-                                 v
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                  SYSTEM OPTIMIZATION / PLANNING                             │
-│ OSeMOSYS | PyPSA optimization | design-space exploration                  │
-└────────────────────────────────┬────────────────────────────────────────────┘
-                                 │
-                                 v
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                   DIGITAL TWIN / OPERATIONS                                 │
-│ State estimation | forecasts | scenario replay | PHM | performance        │
-│ OpenOA | Wind Turbine PHM | AgentLib | time-series analytics              │
-└────────────────────────────────┬────────────────────────────────────────────┘
-                                 │
-                                 v
-┌─────────────────────────────────────────────────────────────────────────────┐
-│              DATA / OBSERVABILITY / INFRASTRUCTURE                         │
-│ PostgreSQL | Time-series DB | object storage | OpenTelemetry | Grafana    │
-│ Docker | Kubernetes/k3s | Edge | HPC                                      │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    U["Engineering workspace"] --> P["Policy and experiment review"]
+    P --> A["AI proposals and retrieval"]
+    A --> R["Reviewed scenario"]
+    P --> R
+    R --> C["Co-simulation adapters"]
+    C --> G["Grid and planning models"]
+    C --> H["Hydrogen and thermal models"]
+    C --> W["Renewable and marine models"]
+    G --> E["Versioned evidence store"]
+    H --> E
+    W --> E
+    E --> V["Analytics and replay"]
+    V --> U
 ```
 
 ---
 
-# 4. Category A — Agent-Based Energy-System Control
+## 4. Category A — Agent-Based Energy-System Control
 
-## AgentLib
+### AgentLib
 
 **Source role:** framework for development and execution of agents for control and simulation of energy systems.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core AI/control orchestration candidate**
 
 Recommended position:
 
-```text
-System Objective
-      ↓
-AgentLib
-      ↓
-Agent Policy / Coordination
-      ↓
-Domain Simulator
-      ↓
-Observed State / Reward / KPI
-```
+| Reference element |
+| --- |
+| System Objective |
+| AgentLib |
+| Agent Policy / Coordination |
+| Domain Simulator |
+| Observed State / Reward / KPI |
 
 Best uses:
 
@@ -179,19 +166,19 @@ Best uses:
 - optimization experiments;
 - digital-twin control research.
 
-### Classification
+#### Classification
 
 **Primary Agent-Based Energy-System Framework**
 
 ---
 
-# 5. Category B — Solar, Storage & Distributed Energy
+## 5. Category B — Solar, Storage & Distributed Energy
 
-## LibreSolar System Simulation
+### LibreSolar System Simulation
 
 **Source role:** solar/storage system simulation.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Strong distributed-energy candidate**
 
@@ -203,15 +190,15 @@ Best for:
 - off-grid / hybrid systems;
 - controller evaluation.
 
-### Classification
+#### Classification
 
 **Strategic Solar / Storage Simulation Component**
 
 ---
 
-## Modelica Library for Photovoltaic Systems and Power Converters
+### Modelica Library for Photovoltaic Systems and Power Converters
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core Modelica PV/power-electronics candidate**
 
@@ -223,19 +210,19 @@ Recommended for:
 - dynamic grid interaction;
 - control-system studies.
 
-### Classification
+#### Classification
 
 **Strategic PV + Converter Model Library**
 
 ---
 
-# 6. Category C — Hydrogen & Integrated Energy
+## 6. Category C — Hydrogen & Integrated Energy
 
-## H2Integrate
+### H2Integrate
 
 **Source role:** hydrogen integration.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strategic hydrogen-system candidate**
 
@@ -247,61 +234,57 @@ Potential roles:
 - renewable-to-hydrogen analysis;
 - integrated electricity/hydrogen scenarios.
 
-### Classification
+#### Classification
 
 **Primary Hydrogen Integration Candidate**
 
 ---
 
-## HYBRID
+### HYBRID
 
 **Source role:** collection of transient Modelica process models representing physical dynamics of integrated energy systems and processes.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core integrated-energy dynamic-model candidate**
 
 Best fit:
 
-```text
-Electricity
-   +
-Thermal
-   +
-Hydrogen / Process
-   ↓
-HYBRID
-   ↓
-Dynamic Integrated-Energy Simulation
-```
+| Reference element |
+| --- |
+| Electricity |
+| Thermal |
+| Hydrogen / Process |
+| HYBRID |
+| Dynamic Integrated-Energy Simulation |
 
-### Classification
+#### Classification
 
 **Strategic Multi-Energy Modelica Backbone**
 
 ---
 
-## OpenRESV
+### OpenRESV
 
 **Source role:** open-source Modelica-based library.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Modelica renewable-system candidate**
 
 The source README does not provide enough detail to define its exact subsystem scope, so it should be integrated through generic Modelica/FMI contracts until its upstream model set is reviewed.
 
-### Classification
+#### Classification
 
 **Modelica Renewable-Energy Library Candidate**
 
 ---
 
-# 7. Category D — Green IT / Energy-Aware Computing
+## 7. Category D — Green IT / Energy-Aware Computing
 
-## Hy4GreenIT Simulation Model
+### Hy4GreenIT Simulation Model
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Specialized cross-domain energy/IT research component**
 
@@ -312,7 +295,7 @@ Potential architectural role:
 - hydrogen-supported computing energy scenarios;
 - energy-demand flexibility.
 
-### Classification
+#### Classification
 
 **Green-IT / Sector-Coupling Research Candidate**
 
@@ -320,13 +303,13 @@ Exact scope and upstream documentation should be verified before core adoption.
 
 ---
 
-# 8. Category E — Power-System Analysis
+## 8. Category E — Power-System Analysis
 
-## PyPSA
+### PyPSA
 
 **Source role:** Python for Power System Analysis.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core power-system planning/optimization candidate**
 
@@ -340,27 +323,24 @@ Recommended for:
 
 Architecture:
 
-```text
-Network + Demand + Generation
-          ↓
-         PyPSA
-          ↓
-Optimization / Power Flow
-          ↓
-Dispatch / Expansion Results
-```
+| Reference element |
+| --- |
+| Network + Demand + Generation |
+| PyPSA |
+| Optimization / Power Flow |
+| Dispatch / Expansion Results |
 
-### Classification
+#### Classification
 
 **Primary Open Power-System Analysis Layer**
 
 ---
 
-## Antares Simulator
+### Antares Simulator
 
 **Source role:** open-source power-system simulator.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strategic adequacy / market-system simulation candidate**
 
@@ -372,17 +352,17 @@ Best for:
 - interconnection studies;
 - long-horizon scenarios.
 
-### Classification
+#### Classification
 
 **Strategic Power-System Scenario Simulator**
 
 ---
 
-## Dynaωo
+### Dynaωo
 
 **Source role:** hybrid C++/Modelica open-source simulation suite.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — High-value dynamic grid-simulation candidate**
 
@@ -393,17 +373,17 @@ Best fit:
 - electromechanical studies;
 - Modelica/C++ hybrid simulation.
 
-### Classification
+#### Classification
 
 **Primary Dynamic Power-System Candidate**
 
 ---
 
-## PowerGrids
+### PowerGrids
 
 **Source role:** Modelica library for electro-mechanical modelling.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strategic electromechanical grid library**
 
@@ -414,17 +394,17 @@ Best for:
 - dynamic grid studies;
 - Modelica integration.
 
-### Classification
+#### Classification
 
 **Strategic Modelica Grid Component**
 
 ---
 
-## HanserModelica
+### HanserModelica
 
 **Source role:** Modelica library applied to electrical engineering.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Supporting electrical-model library**
 
@@ -432,78 +412,67 @@ Useful as a complementary Modelica reference for educational and engineering ele
 
 ---
 
-# 9. Category F — HIL & Smart Grid Co-Simulation
+## 9. Category F — HIL & Smart Grid Co-Simulation
 
-## OpenDSS to Typhoon HIL Interface Library
+### OpenDSS to Typhoon HIL Interface Library
 
 **Source role:** interface between OpenDSS and Typhoon HIL.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — High-value HIL integration candidate**
 
 Recommended pattern:
 
-```text
-Distribution Grid Model
-        ↓
-OpenDSS
-        ↓
-Interface Layer
-        ↓
-Typhoon HIL
-        ↓
-Controller / Hardware Test
-```
+| Reference element |
+| --- |
+| Distribution Grid Model |
+| OpenDSS |
+| Interface Layer |
+| Typhoon HIL |
+| Controller / Hardware Test |
 
 Because Typhoon HIL is not an open-source platform, this interface should be treated as an **optional external HIL bridge**, not as part of the open-source core.
 
-### Classification
+#### Classification
 
 **Optional Commercial-HIL Adapter**
 
 ---
 
-## mosaik
+### mosaik
 
 **Source role:** flexible Smart Grid co-simulation framework.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core energy co-simulation candidate**
 
 Recommended as one of the primary integration backbones.
 
-```text
-PyPSA
-  |
-Dynaωo
-  |
-Hydrogen Model
-  |
-Thermal Model
-  |
-AgentLib
-  |
-  v
-mosaik
-  ↓
-Integrated Smart-Grid Scenario
-```
+| Reference element |
+| --- |
+| PyPSA |
+| Dynaωo |
+| Hydrogen Model |
+| Thermal Model |
+| AgentLib |
+| mosaik |
+| Integrated Smart-Grid Scenario |
 
-### Classification
+#### Classification
 
 **Primary Smart-Grid Co-Simulation Orchestrator**
 
 ---
 
-# 10. Category G — System Optimization
+## 10. Category G — System Optimization
 
-## OSeMOSYS
+### OSeMOSYS
 
 **Source role:** full-fledged systems optimization model.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core strategic planning candidate**
 
@@ -514,30 +483,30 @@ Best use:
 - technology portfolio optimization;
 - policy/scenario comparison.
 
-### Classification
+#### Classification
 
 **Primary Long-Term Energy-System Optimization Layer**
 
 Recommended separation:
 
-```text
-OSeMOSYS → long-horizon strategy
-PyPSA    → network + dispatch/expansion
-Antares  → chronological adequacy/scenario analysis
-Dynaωo   → dynamic grid behaviour
-```
+| Reference element |
+| --- |
+| OSeMOSYS → long-horizon strategy |
+| PyPSA    → network + dispatch/expansion |
+| Antares  → chronological adequacy/scenario analysis |
+| Dynaωo   → dynamic grid behaviour |
 
 These tools are complementary rather than direct substitutes.
 
 ---
 
-# 11. Category H — Hydropower
+## 11. Category H — Hydropower
 
-## OpenHPL
+### OpenHPL
 
 **Source role:** open-source hydropower library.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core hydropower simulation candidate**
 
@@ -548,19 +517,19 @@ Best for:
 - hydro plant dynamics;
 - Modelica-based energy-system coupling.
 
-### Classification
+#### Classification
 
 **Primary Hydropower Dynamic-Model Component**
 
 ---
 
-# 12. Category I — Thermal Systems
+## 12. Category I — Thermal Systems
 
-## ThermoSysPro
+### ThermoSysPro
 
 **Source role:** component library for thermal hydraulics.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core thermal-system simulation candidate**
 
@@ -572,17 +541,17 @@ Recommended for:
 - fluid networks;
 - thermal-hydraulic systems.
 
-### Classification
+#### Classification
 
 **Strategic Thermal-Hydraulic Model Library**
 
 ---
 
-## ThermoCycle
+### ThermoCycle
 
 **Source role:** dynamic modelling library for thermal systems.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strong thermodynamic-cycle candidate**
 
@@ -594,19 +563,19 @@ Best for:
 - waste-heat recovery;
 - dynamic thermal processes.
 
-### Classification
+#### Classification
 
 **Strategic Thermal-Cycle Model Library**
 
 ---
 
-# 13. Category J — Wind Turbine Dynamics
+## 13. Category J — Wind Turbine Dynamics
 
-## OpenFAST
+### OpenFAST
 
 **Source role:** wind-turbine simulation tool.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core wind-turbine simulation candidate**
 
@@ -617,17 +586,17 @@ Recommended for:
 - control-system studies;
 - offshore wind dynamics.
 
-### Classification
+#### Classification
 
 **Primary Wind-Turbine Physics Simulator**
 
 ---
 
-## SHARPy
+### SHARPy
 
 **Source role:** modular aeroelastic solver.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strategic aeroelastic research candidate**
 
@@ -638,19 +607,19 @@ Best for:
 - aeroelasticity;
 - advanced turbine/airfoil concepts.
 
-### Classification
+#### Classification
 
 **Advanced Aeroelastic Simulation Component**
 
 ---
 
-# 14. Category K — Wind Farm Simulation & Design
+## 14. Category K — Wind Farm Simulation & Design
 
-## WindSE
+### WindSE
 
 **Source role:** FEniCS-backed wind-farm simulation package.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core open wind-farm optimization candidate**
 
@@ -661,17 +630,17 @@ Best for:
 - wake interaction;
 - physics-driven farm design.
 
-### Classification
+#### Classification
 
 **Primary Wind-Farm Simulation/Optimization Candidate**
 
 ---
 
-## WInc3D
+### WInc3D
 
 **Source role:** integrated wind-farm simulation framework.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Alternative integrated wind-farm candidate**
 
@@ -679,9 +648,9 @@ Best positioned as a comparative/advanced simulation path alongside WindSE.
 
 ---
 
-## Wind Plant Integrated System Design and Engineering Model
+### Wind Plant Integrated System Design and Engineering Model
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Systems engineering wind-plant candidate**
 
@@ -692,17 +661,17 @@ Recommended role:
 - techno-engineering optimization;
 - multidisciplinary wind-plant design.
 
-### Classification
+#### Classification
 
 **Strategic Wind-Plant System Design Component**
 
 ---
 
-## OpenOA
+### OpenOA
 
 **Source role:** wind-plant performance assessment framework.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core operational analytics candidate**
 
@@ -713,45 +682,42 @@ Best for:
 - plant KPIs;
 - production-loss diagnostics.
 
-### Classification
+#### Classification
 
 **Primary Wind-Plant Performance Analytics Layer**
 
 ---
 
-# 15. Category L — Floating Offshore Wind
+## 15. Category L — Floating Offshore Wind
 
-## Design Optimization of FOWT
+### Design Optimization of FOWT
 
 **Source role:** floating offshore wind-turbine design optimization.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — High-value offshore design research block**
 
 Recommended integration:
 
-```text
-FOWT Geometry / Parameters
-         ↓
-Hydrodynamics + Aeroelastic Models
-         ↓
-Optimization
-         ↓
-Candidate Floating Platform
-```
+| Reference element |
+| --- |
+| FOWT Geometry / Parameters |
+| Hydrodynamics + Aeroelastic Models |
+| Optimization |
+| Candidate Floating Platform |
 
-### Classification
+#### Classification
 
 **Strategic FOWT Optimization Candidate**
 
 ---
 
-## SOWFA + FAST + OpenFOAM for FOWT
+### SOWFA + FAST + OpenFOAM for FOWT
 
 The source list references a combination of SOWFA, FAST and OpenFOAM for floating offshore wind.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — High-fidelity offshore wind research stack**
 
@@ -762,19 +728,19 @@ Recommended role:
 - coupled offshore behaviour;
 - high-fidelity validation.
 
-### Classification
+#### Classification
 
 **Advanced Offshore Wind Simulation Profile**
 
 ---
 
-# 16. Category M — Marine Hydrodynamics
+## 16. Category M — Marine Hydrodynamics
 
-## BEMRosetta
+### BEMRosetta
 
 **Source role:** hydrodynamic-solvers integration/conversion tooling.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Strategic hydrodynamic interoperability candidate**
 
@@ -785,17 +751,17 @@ Best fit:
 - marine response analysis;
 - offshore structures.
 
-### Classification
+#### Classification
 
 **Hydrodynamic Integration Layer**
 
 ---
 
-## oc4-floatfoam
+### oc4-floatfoam
 
 **Source role:** OpenFOAM case repository for wave–structure interaction simulations.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — High-value CFD validation reference**
 
@@ -806,35 +772,31 @@ Best for:
 - offshore validation;
 - OpenFOAM-based research workflows.
 
-### Classification
+#### Classification
 
 **Strategic Wave–Structure CFD Validation Candidate**
 
 ---
 
-# 17. Category N — Wave Energy
+## 17. Category N — Wave Energy
 
-## Wave Energy Converter Simulator
+### Wave Energy Converter Simulator
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Domain-specific renewable generation candidate**
 
 Recommended role:
 
-```text
-Wave Climate
-    ↓
-Hydrodynamic Model
-    ↓
-WEC Dynamics
-    ↓
-PTO / Control
-    ↓
-Energy Output
-```
+| Reference element |
+| --- |
+| Wave Climate |
+| Hydrodynamic Model |
+| WEC Dynamics |
+| PTO / Control |
+| Energy Output |
 
-### Classification
+#### Classification
 
 **Strategic Marine-Renewable Simulation Component**
 
@@ -843,7 +805,7 @@ The exact upstream project should be documented because the source README gives 
 ---
 
 
-## Marine Energy Extension — HECS, TEC, WEC and OTEC
+### Marine Energy Extension — HECS, TEC, WEC and OTEC
 
 JFXAI4MESS also includes an open, modular marine-energy profile for resource modelling, conversion-system simulation, co-simulation and digital-twin development. The concepts below can be represented with open Modelica/Python models, FMI/FMU interfaces, hydrodynamic solvers and reusable data contracts.
 
@@ -856,29 +818,24 @@ JFXAI4MESS also includes an open, modular marine-energy profile for resource mod
 
 Recommended integration boundary:
 
-```text
-Ocean Resource
-      ↓
-HECS / TEC / WEC / OTEC Conversion Model
-      ↓
-Generator, Thermal Cycle or Power-Take-Off
-      ↓
-Power Conditioning and Marine Collector
-      ↓
-Grid / Storage / Hydrogen / Desalination Scenario
-      ↓
-Digital Twin, Forecasting and PHM
-```
+| Reference element |
+| --- |
+| Ocean Resource |
+| HECS / TEC / WEC / OTEC Conversion Model |
+| Generator, Thermal Cycle or Power-Take-Off |
+| Power Conditioning and Marine Collector |
+| Grid / Storage / Hydrogen / Desalination Scenario |
+| Digital Twin, Forecasting and PHM |
 
 These profiles remain modular: each converter can be simulated independently and then connected through FMI/FMU, Modelica, Python APIs, mosaik or preCICE where the coupling requires tighter multiphysics coordination.
 
-# 18. Category O — Multiphysics Coupling
+## 18. Category O — Multiphysics Coupling
 
-## preCICE
+### preCICE
 
 **Source role:** coupling library for partitioned multiphysics simulations.
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core multiphysics integration backbone**
 
@@ -892,31 +849,30 @@ Recommended for:
 
 Architecture:
 
-```text
-Solver A
-   ↕
-preCICE
-   ↕
-Solver B
-```
+| Reference element |
+| --- |
+| Solver A |
+| ↕ |
+| preCICE |
+| Solver B |
 
 Examples:
 
-```text
-OpenFOAM ↔ structural solver
-CFD ↔ thermal solver
-wave model ↔ floating structure
-```
+| Reference element |
+| --- |
+| OpenFOAM ↔ structural solver |
+| CFD ↔ thermal solver |
+| wave model ↔ floating structure |
 
-### Classification
+#### Classification
 
 **Primary Multiphysics Coupling Layer**
 
 ---
 
-# 19. Category P — Nuclear / Advanced Reactor Research Reference
+## 19. Category P — Nuclear / Advanced Reactor Research Reference
 
-## Project Firefly — Community-Selected Advanced Small Reactor
+### Project Firefly — Community-Selected Advanced Small Reactor
 
 The source README includes Project Firefly as a community-selected advanced small reactor project.
 
@@ -924,17 +880,14 @@ For JFXAI4MESS, it is best positioned at **high level** as an integrated-energy-
 
 Potential architecture role:
 
-```text
-Advanced Reactor Energy Source Model
-           ↓
-Thermal / Power Conversion Model
-           ↓
-Integrated Energy System
-           ↓
-Grid / Hydrogen / Heat Scenarios
-```
+| Reference element |
+| --- |
+| Advanced Reactor Energy Source Model |
+| Thermal / Power Conversion Model |
+| Integrated Energy System |
+| Grid / Hydrogen / Heat Scenarios |
 
-### Classification
+#### Classification
 
 **Research Reference / Integrated-Energy Scenario Candidate**
 
@@ -942,13 +895,13 @@ Any operational reactor design, licensing, safety analysis or detailed reactor-e
 
 ---
 
-# 20. Category Q — Chemistry / Energy Agents
+## 20. Category Q — Chemistry / Energy Agents
 
-## NeqSim Community Agents
+### NeqSim Community Agents
 
 **Source role:** community agents around NeqSim.
 
-### Strategic value
+#### Strategic value
 
 **4/5 — Process/thermodynamic agent integration candidate**
 
@@ -959,137 +912,100 @@ Potential use:
 - agent-driven engineering workflows;
 - hydrogen / gas-process support.
 
-### Classification
+#### Classification
 
 **Thermodynamics / Process Agent Candidate**
 
 ---
 
-# 21. Category R — Prognostics & Health Management
+## 21. Category R — Prognostics & Health Management
 
-## Wind Turbine Prognostics and Health Management Library
+### Wind Turbine Prognostics and Health Management Library
 
-### Strategic value
+#### Strategic value
 
 **5/5 — Core asset-health / predictive-maintenance candidate**
 
 Recommended pipeline:
 
-```text
-SCADA / Sensor Data
-       ↓
-Feature / Condition Model
-       ↓
-PHM
-       ↓
-Fault / Degradation Estimate
-       ↓
-Maintenance Recommendation
-```
+| Reference element |
+| --- |
+| SCADA / Sensor Data |
+| Feature / Condition Model |
+| PHM |
+| Fault / Degradation Estimate |
+| Maintenance Recommendation |
 
-### Classification
+#### Classification
 
 **Strategic Wind Asset PHM Layer**
 
 ---
 
-# 22. Recommended Co-Simulation Backbone
+## 22. Recommended Co-Simulation Backbone
 
-The strongest alternative architecture uses **two complementary coupling styles**:
+The proposed architecture evaluates **two complementary coupling styles**:
 
-```text
-              MULTI-ENERGY ORCHESTRATION
-                        |
-                       mosaik
-                        |
-      +-----------------+------------------+
-      |                 |                  |
-      v                 v                  v
-    PyPSA             HYBRID           AgentLib
-      |                 |                  |
-      +-----------------+------------------+
-                        |
-                 System Scenario
+```mermaid
+flowchart TD
+    R["Coupling requirements"] --> T{"Coupling style?"}
+    T -->|System scheduling| M["mosaik and domain adapters"]
+    T -->|Field exchange| P["preCICE and solver adapters"]
+    M --> C["Time and interface checks"]
+    P --> C
+    C --> V{"Stable and reproducible?"}
+    V -->|No| R
+    V -->|Yes| E["Documented coupled experiment"]
 ```
 
 and for tightly coupled multiphysics:
 
-```text
-           HIGH-FIDELITY MULTIPHYSICS
-                      |
-                   preCICE
-                /      |      \
-               v       v       v
-          OpenFOAM  Structure Thermal
-```
+Field-coupled experiments may connect fluid, structural and thermal solvers through purpose-built adapters. This is a separate coupling choice, not a mandatory stage after every system simulation.
 
 This avoids forcing one coupling technology to solve every integration problem.
 
 ---
 
-# 23. Recommended Energy-System Solver Hierarchy
+## 23. Recommended Energy-System Solver Hierarchy
 
-```text
-STRATEGIC PLANNING
-OSeMOSYS
-     ↓
-NETWORK / DISPATCH / EXPANSION
-PyPSA
-     ↓
-ADEQUACY / CHRONOLOGICAL SYSTEM
-Antares Simulator
-     ↓
-DYNAMIC GRID
-Dynaωo + PowerGrids
-     ↓
-DEVICE / ASSET DYNAMICS
-OpenFAST / OpenHPL / ThermoSysPro / PV Modelica
-     ↓
-HIGH-FIDELITY PHYSICS
-OpenFOAM / SHARPy / WindSE / oc4-floatfoam
-```
+| Reference element |
+| --- |
+| STRATEGIC PLANNING |
+| OSeMOSYS |
+| NETWORK / DISPATCH / EXPANSION |
+| PyPSA |
+| ADEQUACY / CHRONOLOGICAL SYSTEM |
+| Antares Simulator |
+| DYNAMIC GRID |
+| Dynaωo + PowerGrids |
+| DEVICE / ASSET DYNAMICS |
+| OpenFAST / OpenHPL / ThermoSysPro / PV Modelica |
+| HIGH-FIDELITY PHYSICS |
+| OpenFOAM / SHARPy / WindSE / oc4-floatfoam |
 
 This hierarchy lets JFXAI4MESS choose the appropriate fidelity instead of using high-cost simulation for every decision.
 
 ---
 
-# 24. Multi-Energy Digital Twin Architecture
+## 24. Multi-Energy Digital Twin Architecture
 
-```text
-Physical / Operational Data
-        |
-        v
-Telemetry & Time-Series Layer
-        |
-        v
-+--------------------------------+
-| MULTI-ENERGY DIGITAL TWIN      |
-| Grid                           |
-| Wind                           |
-| Solar + Storage                |
-| Hydrogen                       |
-| Thermal                        |
-| Hydro                          |
-| Marine / Offshore              |
-+---------------+----------------+
-                |
-       +--------+---------+
-       |                  |
-       v                  v
- Simulation          State Estimation
-       |                  |
-       +--------+---------+
-                |
-                v
-        Forecast / Optimization
-                |
-                v
-          Human Decision
+```mermaid
+flowchart TD
+    T["Recorded or approved asset telemetry"] --> I["Ingestion and time alignment"]
+    I --> Q{"Data quality acceptable?"}
+    Q -->|No| H["Quarantine and investigate"]
+    H --> I
+    Q -->|Yes| S["Versioned state estimate"]
+    S --> M["Model comparison"]
+    S --> A["Forecast and health analytics"]
+    M --> R["Human review of uncertainty"]
+    A --> R
+    R --> E["Recorded decision and replay"]
 ```
 
 ---
 
-# 25. Proposed Complementary Open AI Layer
+## 25. Proposed Complementary Open AI Layer
 
 The following components are **proposed integrations**, not source-list dependencies:
 
@@ -1112,30 +1028,18 @@ Optional local/private reasoning models should sit behind a provider-neutral gat
 
 ---
 
-# 26. AI Engineering Copilot
+## 26. AI Engineering Copilot
 
-```text
-Engineer / Analyst
-        |
-        v
-Multi-Energy AI Copilot
-        |
- +------+---------+-----------+----------+
- |                |           |          |
- v                v           v          v
-RAG           Scenario     Optimizer    PHM Agent
-              Agent        Agent
- |                |           |          |
- +----------------+-----------+----------+
-                  |
-                  v
-             Tool Gateway
-                  |
- +----------------+------------------------------+
- |                |              |               |
- v                v              v               v
-PyPSA           Dynaωo        OpenFAST        OSeMOSYS
-HYBRID          OpenHPL       WindSE          preCICE
+```mermaid
+flowchart TD
+    U["Engineering question"] --> R["Retrieve approved evidence"]
+    R --> P["Propose bounded experiment"]
+    P --> G{"Policy and review satisfied?"}
+    G -->|No| H["Revise or reject"]
+    H --> P
+    G -->|Yes| S["Execute allow-listed simulation tools"]
+    S --> V["Check outputs and provenance"]
+    V --> E["Advisory explanation with uncertainty"]
 ```
 
 AI responsibilities:
@@ -1153,21 +1057,15 @@ AI should not replace the numerical solver or independently certify engineering 
 
 ---
 
-# 27. Model Routing Principle
+## 27. Model Routing Principle
 
-```text
-Engineering Task
-      |
-      v
-Task / Model Router
-      |
- +----+-----------+-------------------+
- |                |                   |
- v                v                   v
-LLM / Agent   Optimization Model  Physics Solver
-             OSeMOSYS / PyPSA     Dynaωo/OpenFAST/
-                                  OpenFOAM/etc.
-```
+| Reference element |
+| --- |
+| Engineering Task |
+| Task / Model Router |
+| LLM / Agent   Optimization Model  Physics Solver |
+| OSeMOSYS / PyPSA     Dynaωo/OpenFAST/ |
+| OpenFOAM/etc. |
 
 Examples:
 
@@ -1181,139 +1079,104 @@ Examples:
 
 ---
 
-# 28. Alternative Integration Profiles
+## 28. Alternative Integration Profiles
 
-## Profile A — Power-System Planning
+### Profile A — Power-System Planning
 
-```text
-OSeMOSYS
-   ↓
-PyPSA
-   ↓
-Antares Simulator
-   ↓
-Dynaωo
-   ↓
-PowerGrids
-```
+| Reference element |
+| --- |
+| OSeMOSYS |
+| PyPSA |
+| Antares Simulator |
+| Dynaωo |
+| PowerGrids |
 
 **Best for:** long-term planning through dynamic grid validation.
 
 ---
 
-## Profile B — Hydrogen + Renewable Microgrid
+### Profile B — Hydrogen + Renewable Microgrid
 
-```text
-LibreSolar
-    +
-PV Modelica
-    +
-H2Integrate
-    +
-HYBRID
-    ↓
-mosaik
-    ↓
-AgentLib
-    ↓
-Optimization
-```
+| Reference element |
+| --- |
+| LibreSolar |
+| PV Modelica |
+| H2Integrate |
+| HYBRID |
+| mosaik |
+| AgentLib |
+| Optimization |
 
 **Best for:** integrated electricity/storage/hydrogen systems.
 
 ---
 
-## Profile C — Floating Offshore Wind
+### Profile C — Floating Offshore Wind
 
-```text
-Wind Plant Design Model
-        ↓
-OpenFAST
-        ↓
-BEMRosetta
-        ↓
-oc4-floatfoam / OpenFOAM
-        ↓
-preCICE
-        ↓
-FOWT Optimization
-```
+| Reference element |
+| --- |
+| Wind Plant Design Model |
+| OpenFAST |
+| BEMRosetta |
+| oc4-floatfoam / OpenFOAM |
+| preCICE |
+| FOWT Optimization |
 
 **Best for:** multidisciplinary floating-wind design and validation.
 
 ---
 
-## Profile D — Wind Farm Digital Twin
+### Profile D — Wind Farm Digital Twin
 
-```text
-Operational Data
-      ↓
-OpenOA
-      ↓
-Wind Turbine PHM
-      ↓
-OpenFAST / WindSE
-      ↓
-Digital Twin
-      ↓
-Maintenance / Optimization
-```
+| Reference element |
+| --- |
+| Operational Data |
+| OpenOA |
+| Wind Turbine PHM |
+| OpenFAST / WindSE |
+| Digital Twin |
+| Maintenance / Optimization |
 
 **Best for:** operations and asset-performance improvement.
 
 ---
 
-## Profile E — Hydro + Thermal + Grid
+### Profile E — Hydro + Thermal + Grid
 
-```text
-OpenHPL
-   +
-ThermoSysPro / ThermoCycle
-   +
-Dynaωo
-   ↓
-mosaik
-   ↓
-Integrated Dynamic Scenario
-```
+| Reference element |
+| --- |
+| OpenHPL |
+| ThermoSysPro / ThermoCycle |
+| Dynaωo |
+| mosaik |
+| Integrated Dynamic Scenario |
 
 **Best for:** hydro-thermal-grid interaction studies.
 
 ---
 
-## Profile F — Fully Open Multi-Energy Research Stack
+### Profile F — Fully Open Multi-Energy Research Stack
 
-```text
-Capella / MBSE
-      ↓
-OSeMOSYS
-      ↓
-PyPSA
-      ↓
-mosaik
-      ↓
-Dynaωo + PowerGrids
-      +
-HYBRID / H2Integrate
-      +
-OpenFAST / WindSE
-      +
-OpenHPL
-      +
-ThermoSysPro
-      ↓
-preCICE where tightly coupled
-      ↓
-OpenOA / PHM
-      ↓
-AI Copilot / RAG
-```
+| Reference element |
+| --- |
+| Capella / MBSE |
+| OSeMOSYS |
+| PyPSA |
+| mosaik |
+| Dynaωo + PowerGrids |
+| HYBRID / H2Integrate |
+| OpenFAST / WindSE |
+| OpenHPL |
+| ThermoSysPro |
+| preCICE where tightly coupled |
+| OpenOA / PHM |
+| AI Copilot / RAG |
 
 ---
 
-# 29. Strategic Priority
+## 29. Strategic Priority
 
-## Priority 1 — Core Multi-Energy Backbone
+### Priority 1 — Core Multi-Energy Backbone
 
 - AgentLib
 - PyPSA
@@ -1324,11 +1187,11 @@ AI Copilot / RAG
 - HYBRID
 - preCICE
 
-These form the strongest cross-domain architecture.
+These are initial integration candidates; selection depends on the experiment and adapter evidence.
 
 ---
 
-## Priority 2 — Renewable Asset Simulation
+### Priority 2 — Renewable Asset Simulation
 
 - OpenFAST
 - WindSE
@@ -1341,7 +1204,7 @@ These form the strongest cross-domain architecture.
 
 ---
 
-## Priority 3 — Offshore / High-Fidelity
+### Priority 3 — Offshore / High-Fidelity
 
 - BEMRosetta
 - oc4-floatfoam
@@ -1353,7 +1216,7 @@ These form the strongest cross-domain architecture.
 
 ---
 
-## Priority 4 — Specialized / Experimental
+### Priority 4 — Specialized / Experimental
 
 - H2Integrate
 - Hy4GreenIT
@@ -1364,7 +1227,7 @@ These form the strongest cross-domain architecture.
 
 ---
 
-## Priority 5 — External / Verification Required
+### Priority 5 — External / Verification Required
 
 - OpenDSS → Typhoon HIL bridge: useful, but target HIL platform is commercial.
 - Project Firefly: research/scenario reference; exact open-source implementation status should be verified.
@@ -1372,7 +1235,7 @@ These form the strongest cross-domain architecture.
 
 ---
 
-# 30. Value Matrix
+## 30. Value Matrix
 
 | Component | Domain | Strategic Value | Recommended Role |
 |---|---|---:|---|
@@ -1413,31 +1276,23 @@ These form the strongest cross-domain architecture.
 
 ---
 
-# 31. Recommended MVP
+## 31. Recommended MVP
 
 The MVP should demonstrate cross-domain integration without trying to integrate every simulator.
 
-```text
-Scenario Definition
-      ↓
-OSeMOSYS
-      ↓
-PyPSA
-      ↓
-mosaik
-      ↓
-Dynaωo
-      +
-HYBRID
-      +
-OpenFAST
-      ↓
-Results / KPIs
-      ↓
-AI Copilot + RAG
+```mermaid
+flowchart TD
+    R["Versioned scenario and baseline"] --> P["Planning or dispatch study"]
+    P --> A["Selected dynamic-model adapters"]
+    A --> C["Coordinated experiment"]
+    C --> V{"Conservation and regression checks pass?"}
+    V -->|No| A
+    V -->|Yes| K["KPIs and reference comparison"]
+    K --> H["Human acceptance review"]
+    H --> E["Reproducible evidence package"]
 ```
 
-### MVP capabilities
+#### MVP capabilities
 
 - define electricity, renewable and storage scenarios;
 - optimize long-horizon system composition;
@@ -1452,73 +1307,54 @@ AI Copilot + RAG
 
 ---
 
-# 32. MVP Extension — Offshore Wind
+## 32. MVP Extension — Offshore Wind
 
-```text
-OpenFAST
-   +
-BEMRosetta
-   +
-oc4-floatfoam
-   +
-preCICE
-   ↓
-FOWT Design / Validation
-```
+| Reference element |
+| --- |
+| OpenFAST |
+| BEMRosetta |
+| oc4-floatfoam |
+| preCICE |
+| FOWT Design / Validation |
 
 This becomes the high-fidelity marine/offshore extension.
 
 ---
 
-# 33. MVP Extension — Asset Operations
+## 33. MVP Extension — Asset Operations
 
-```text
-Operational Data
-      ↓
-OpenOA
-      +
-Wind Turbine PHM
-      ↓
-Asset Digital Twin
-      ↓
-AI Diagnostic Assistant
-```
+| Reference element |
+| --- |
+| Operational Data |
+| OpenOA |
+| Wind Turbine PHM |
+| Asset Digital Twin |
+| AI Diagnostic Assistant |
 
 ---
 
-# 34. MBSE → CAD → CAM → CAS Mapping
+## 34. MBSE → CAD → CAM → CAS Mapping
 
-```text
-MBSE
-Arcadia / Capella
-System architecture and energy scenarios
-        ↓
-CAD
-Physical asset / plant geometry where required
-        ↓
-CAM
-Manufacturing/assembly preparation for prototypes/assets
-        ↓
-CAS
-OSeMOSYS
-PyPSA
-mosaik
-Dynaωo
-OpenFAST
-HYBRID
-OpenHPL
-ThermoSysPro
-WindSE
-preCICE
-        ↓
-End-to-End System Validation
+```mermaid
+flowchart TD
+    N["Needs and operational analysis"] --> A["Architecture and interfaces"]
+    A --> G["CAD and model baselines"]
+    G --> S["CAS simulation cases"]
+    G --> C["CAM studies when required"]
+    S --> V{"Verification criteria met?"}
+    V -->|No| G
+    V -->|Yes| L{"Valid for intended use?"}
+    L -->|No| N
+    L -->|Yes| E["Reviewed engineering baseline"]
 ```
 
 For JFXAI4MESS, **CAS becomes the principal integration layer**, because multi-energy performance depends on coupled simulation across many domains.
 
 ---
 
-# 35. Suggested Repository Structure
+## 35. Suggested Repository Structure
+
+This is a future layout, not an inventory of implemented modules. Current CAD and CAS files are listed in section 41.
 
 ```text
 jfxai4mess/
@@ -1600,54 +1436,63 @@ jfxai4mess/
 
 ---
 
-# 36. Roadmap
+## 36. Roadmap
 
-## Phase 1 — Power-System Foundation
+### Phase 1 — Power-System Foundation
+
 - PyPSA;
 - OSeMOSYS;
 - scenario schema;
 - common result model.
 
-## Phase 2 — Co-Simulation
+### Phase 2 — Co-Simulation
+
 - mosaik;
 - adapters;
 - synchronization;
 - event/time coordination.
 
-## Phase 3 — Dynamic Grid
+### Phase 3 — Dynamic Grid
+
 - Dynaωo;
 - PowerGrids;
 - transient/dynamic scenarios.
 
-## Phase 4 — Multi-Energy
+### Phase 4 — Multi-Energy
+
 - H2Integrate;
 - HYBRID;
 - LibreSolar;
 - PV Modelica.
 
-## Phase 5 — Wind
+### Phase 5 — Wind
+
 - OpenFAST;
 - OpenOA;
 - WindSE;
 - SHARPy.
 
-## Phase 6 — Offshore / Marine
+### Phase 6 — Offshore / Marine
+
 - BEMRosetta;
 - oc4-floatfoam;
 - preCICE;
 - FOWT optimization.
 
-## Phase 7 — Thermal & Hydro
+### Phase 7 — Thermal & Hydro
+
 - ThermoSysPro;
 - ThermoCycle;
 - OpenHPL.
 
-## Phase 8 — Operations & PHM
+### Phase 8 — Operations & PHM
+
 - wind-turbine PHM;
 - operational data;
 - digital-twin state estimation.
 
-## Phase 9 — AI Engineering Layer
+### Phase 9 — AI Engineering Layer
+
 - AgentLib;
 - RAG;
 - workflow agents;
@@ -1656,113 +1501,75 @@ jfxai4mess/
 
 ---
 
-# 37. Final Strategic Architecture
+## 37. Final Strategic Architecture
 
-```text
-                         JFXAI4MESS
-                              |
-                      AI / AGENT LAYER
-                         AgentLib
-                              |
-                    SCENARIO / MBSE MODEL
-                              |
-              +---------------+---------------+
-              |                               |
-              v                               v
-       LONG-TERM PLANNING               SYSTEM ANALYSIS
-          OSeMOSYS                    PyPSA / Antares
-              |                               |
-              +---------------+---------------+
-                              |
-                           mosaik
-                              |
-       +------------+---------+---------+-------------+
-       |            |                   |             |
-       v            v                   v             v
-    Dynaωo        HYBRID             OpenFAST      OpenHPL
-   PowerGrids    H2Integrate          WindSE      ThermoSysPro
-       |            |                   |             |
-       +------------+---------+---------+-------------+
-                              |
-                           preCICE
-                    (when tightly coupled)
-                              |
-                              v
-                     DIGITAL TWIN / PHM
-                      OpenOA + PHM
-                              |
-                              v
-                     AI DECISION SUPPORT
-```
+| Responsibility | Candidate components |
+| --- | --- |
+| Scenario definition and review | MBSE records, AgentLib and the proposed AI gateway |
+| Planning and system analysis | OSeMOSYS, PyPSA and Antares |
+| System-level coordination | mosaik with validated adapters |
+| Domain dynamics | Dynaωo, PowerGrids, HYBRID, H2Integrate, OpenFAST, WindSE, OpenHPL and ThermoSysPro |
+| Optional field coupling | preCICE where the selected solver interfaces support it |
+| Operations research | OpenOA, PHM and reviewed decision support |
+
+Use the architecture in section 3 and the coupling decision in section 22; this allocation does not require every tool in every experiment.
 
 ---
 
-# 38. Strategic Recommendation
+## 38. Strategic Recommendation
 
-The strongest open integration backbone from the source list is:
+The proposed candidate backbone from the source list is:
 
-```text
-AgentLib
-   +
-OSeMOSYS
-   +
-PyPSA
-   +
-mosaik
-   +
-Dynaωo / PowerGrids
-   +
-HYBRID / H2Integrate
-   +
-OpenFAST / WindSE
-   +
-OpenHPL / ThermoSysPro
-   +
-preCICE
-   +
-OpenOA / PHM
-```
+| Reference element |
+| --- |
+| AgentLib |
+| OSeMOSYS |
+| PyPSA |
+| mosaik |
+| Dynaωo / PowerGrids |
+| HYBRID / H2Integrate |
+| OpenFAST / WindSE |
+| OpenHPL / ThermoSysPro |
+| preCICE |
+| OpenOA / PHM |
 
 This provides a credible progression from:
 
-```text
-Planning
-   ↓
-Network Analysis
-   ↓
-Dynamic Simulation
-   ↓
-Multi-Energy Coupling
-   ↓
-Asset Physics
-   ↓
-Multiphysics
-   ↓
-Operations / PHM
-```
+| Reference element |
+| --- |
+| Planning |
+| Network Analysis |
+| Dynamic Simulation |
+| Multi-Energy Coupling |
+| Asset Physics |
+| Multiphysics |
+| Operations / PHM |
 
 without forcing one simulator to represent every physical or economic domain.
 
 ---
 
-# 39. Source-List Classification Notes
+## 39. Source-List Classification Notes
 
 The architecture distinguishes three statuses:
 
-### Core / Strong Open Candidates
+#### Core / Strong Open Candidates
+
 Projects explicitly described in the source as open-source or widely positioned as open modelling/simulation components.
 
-### Optional / External Integration
+#### Optional / External Integration
+
 Useful components whose target environment may be commercial, such as the Typhoon HIL bridge.
 
-### Research / Verification Required
+#### Research / Verification Required
+
 Entries whose exact upstream identity or license is not uniquely established by the source description.
 
 This avoids incorrectly claiming that every item in the original list has the same licensing model.
 
 ---
 
-# 40. Disclaimer
+## 40. Disclaimer
 
 This document is a proposed software/system integration architecture derived from the alternatives listed in the JFXAI4MESS source README.
 
@@ -1773,3 +1580,63 @@ Licenses, versions, numerical validity, model assumptions, coupling stability, a
 AI-generated scenarios, control recommendations, optimization outputs, prognostics, digital-twin predictions, and simulation results require independent engineering review before operational use.
 
 For advanced-reactor-related research references, this architecture remains at the integrated-energy-system modelling level and does not replace specialist nuclear engineering, safety analysis, licensing, or regulatory review.
+
+## 41. CAD Concept Catalogue and Existing Assets
+
+The [CAD directory](MBSE/CAD/) contains the three boards below. Cutaways, meshes and flow lines are illustrations, not solver outputs. Proposed digital twins require a defined physical asset, calibrated models, synchronised measurements and a maintained data pipeline before they can be described as operational.
+
+### 41.1 Open Modular Floating Wind
+
+![Modular floating offshore wind turbine and digital model](MBSE/CAD/modular-floating-wind-digital-twin.jpg)
+
+The concept combines a three-bladed turbine, tower, interconnected buoyancy columns, submerged supports, mooring lines and a power-export connection. A nacelle cutaway and virtual counterpart indicate proposed component inspection and system monitoring.
+
+**Simulation scope:** aerodynamic loads, turbine control, structural response, platform motion, mooring loads and electrical output. Candidate roles include OpenFAST for the coupled turbine model, hydrodynamic references from the compendium and dedicated high-fidelity coupling only where justified. Ballast behaviour, structural dimensions and ratings remain requirements to define.
+
+**Acceptance evidence:** reference load cases, time-step sensitivity, platform-motion comparisons, fatigue assumptions and traceable controller settings. The board establishes no rated power, service life or validated operating envelope.
+
+### 41.2 Coastal Hydrogen Energy Hub
+
+![Coastal hydrogen hub with electrolysis, water treatment, gaseous storage and distribution](MBSE/CAD/coastal-hydrogen-energy-hub-concept.jpg)
+
+This concept links renewable electricity and a substation to water treatment, electrolysis, gas conditioning, modular high-pressure gaseous storage, tube-trailer loading, pipeline distribution and optional fuel-cell power recovery. The board depicts gaseous hydrogen; it does not show a liquid-hydrogen liquefaction chain.
+
+**Simulation scope:** electricity and water demand, electrolyser operating assumptions, compression loads, storage inventory, distribution scheduling and power recovery. H2Integrate/HYBRID and grid-planning candidates are proposed study options; their exchange variables and overlapping responsibilities need explicit definition.
+
+**Acceptance evidence:** mass and energy balances, equipment operating bounds, demand scenarios and uncertainty in costs and resource availability. Clean-energy messaging is an objective, not a verified lifecycle-emissions result. No capacity, pressure setpoint or construction-ready process specification is inferred from the artwork.
+
+### 41.3 Floating Tidal Energy Platform
+
+![Floating tidal platform with two submerged turbines, moorings and maintenance concept](MBSE/CAD/floating-tidal-energy-concept.jpg)
+
+A floating service platform supports two submerged turbine-generator units on articulated arms, with moorings, an export cable, electrical equipment and condition monitoring. A service vignette proposes raising one arm while the other unit remains in the water.
+
+This is a **TEC / tidal-stream** concept within the broader **HECS** scope. It extracts current energy; it is not a WEC or OTEC illustration. The existing section 17 retains all four marine-energy families as separate modelling profiles.
+
+**Simulation scope:** rotor/current interaction, wake effects, platform motion, mooring loads, generator behaviour, export power and maintenance configurations. Continued generation during servicing is an unvalidated design objective requiring independent isolation, stability and operational review.
+
+**Acceptance evidence:** resource time series, hydrodynamic benchmarks, load envelopes, model sensitivity, ecological assessment inputs and maintenance assumptions. The image provides no demonstrated yield or environmental-impact result.
+
+### 41.4 Shared Model and Interface Contract
+
+| Record | Required content before integration |
+| --- | --- |
+| Asset and geometry | Concept ID, revision, coordinate frame, units and module boundaries |
+| Scenario | Resource time series, demand, operating assumptions and initial conditions |
+| Adapter | Input/output schema, sampling interval, solver version and error behaviour |
+| Coupling | Time ownership, interpolation, convergence and conservation checks |
+| Evidence | Dataset provenance, reference case, uncertainty and reviewer decision |
+| Results | Run ID, configuration hash, KPIs and reproducible replay instructions |
+
+Suggested first studies are one wind load case, one hydrogen mass/energy balance and one tidal resource-to-power case. Couple these only after their individual models and interfaces pass review. AI may explain results and propose scenarios; default interfaces do not command plant equipment.
+
+### 41.5 Existing CAS References
+
+The repository also contains four [Draw.io reference files](MBSE/CAS/Drawio/):
+
+- [Multi-criteria decision-analysis framework](MBSE/CAS/Drawio/framework-for-multicriteria-decision-analysis.drawio).
+- [Fixed and floating offshore wind controller](MBSE/CAS/Drawio/open-source-controller-for-fixed-and-floating-offshore-wind-turbines.drawio).
+- [Nuclear power-plant dynamic simulator](MBSE/CAS/Drawio/dynamic-simulator-for-nuclear-power-plants.drawio).
+- [Pressurised-water plant modelling and control reference](MBSE/CAS/Drawio/dynamic-modelling-simulation-and-control-design-of-a-pressurized-water-type-nuclear-power-plant.drawio).
+
+These are reference artefacts, not proof of implemented models or traceability to every CAD concept. The reactor-related references remain separate from the renewable CAD catalogue and within the scope stated in sections 19 and 40.
